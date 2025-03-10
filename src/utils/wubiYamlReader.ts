@@ -2,11 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 // 解析新世纪五笔码表文件
-export async function parseWubiYamlFile(relativePath: string): Promise<Map<string, string[]>> {
+export async function parseWubiYamlFile(filePath: string): Promise<Map<string, string[]>> {
   try {
-    // 获取文件的绝对路径
-    const filePath = path.join(process.cwd(), relativePath);
-    
     // 读取文件内容
     const fileContent = fs.readFileSync(filePath, 'utf8');
     

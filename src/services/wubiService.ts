@@ -1,9 +1,10 @@
 import { parseWubiYamlFile, getPrimaryCode } from '../utils/wubiYamlReader';
+import path from 'path';
 
 // 五笔码表文件路径
-const WUBI86_FILE_PATH = 'data/wubi86.dict.yaml';
-const WUBI98_FILE_PATH = 'data/wubi98_zhishan.dict.yaml';
-const XSJ_WUBI_FILE_PATH = 'data/wubi06_gb18030-2000_dz.dict.yaml';
+const WUBI86_FILE_PATH = path.join(process.cwd(), 'data/wubi86.dict.yaml');
+const WUBI98_FILE_PATH = path.join(process.cwd(), 'data/wubi98_zhishan.dict.yaml');
+const XSJ_WUBI_FILE_PATH = path.join(process.cwd(), 'data/wubi06_gb18030-2000_dz.dict.yaml');
 
 // 缓存五笔码表数据
 let wubi86Cache: Map<string, string[]> | null = null;
