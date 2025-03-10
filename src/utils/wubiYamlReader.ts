@@ -1,5 +1,4 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'fs'
 
 // 解析新世纪五笔码表文件
 export async function parseWubiYamlFile(filePath: string): Promise<Map<string, string[]>> {

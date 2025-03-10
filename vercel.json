@@ -1,21 +1,8 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "next.config.ts",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ],
+  "version": 2, 
   "functions": {
-    "api/**/*.ts": {
-      "memory": 1024,
-      "maxDuration": 10
+    "api/wubi": {
+      "includeFiles": ["data/*.yaml"]
     }
   }
-} 
+}
