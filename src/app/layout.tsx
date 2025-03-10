@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { initializeWubiData } from '../data/wubiData'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,6 +12,9 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// 在服务器端预加载数据
+initializeWubiData();
 
 export const metadata: Metadata = {
   title: "五笔编码查询系统 - 86版/98版/新世纪五笔在线查询",

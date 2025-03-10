@@ -1,60 +1,48 @@
-import { parseWubiYamlFile, getPrimaryCode } from '../utils/wubiYamlReader';
-import path from 'path';
-
-// 五笔码表文件路径
-const WUBI86_FILE_PATH = path.join(process.cwd(), 'data/wubi86.dict.yaml');
-const WUBI98_FILE_PATH = path.join(process.cwd(), 'data/wubi98_zhishan.dict.yaml');
-const XSJ_WUBI_FILE_PATH = path.join(process.cwd(), 'data/wubi06_gb18030-2000_dz.dict.yaml');
-
-// 缓存五笔码表数据
-let wubi86Cache: Map<string, string[]> | null = null;
-let wubi98Cache: Map<string, string[]> | null = null;
-let xsjWubiCache: Map<string, string[]> | null = null;
+import { getPrimaryCode } from '../utils/wubiYamlReader';
+import { preloadedData, initializeWubiData } from '../data/wubiData';
 
 /**
  * 获取86版五笔码表数据
  */
 export async function getWubi86Data(): Promise<Map<string, string[]>> {
-  if (!wubi86Cache) {
-    wubi86Cache = await parseWubiYamlFile(WUBI86_FILE_PATH);
+  if (!preloadedData) {
+    await initializeWubiData();
   }
-  return wubi86Cache;
+  return preloadedData!.wubi86;
 }
 
 /**
  * 获取98版五笔码表数据
  */
 export async function getWubi98Data(): Promise<Map<string, string[]>> {
-  if (!wubi98Cache) {
-    wubi98Cache = await parseWubiYamlFile(WUBI98_FILE_PATH);
+  if (!preloadedData) {
+    await initializeWubiData();
   }
-  return wubi98Cache;
+  return preloadedData!.wubi98;
 }
 
 /**
  * 获取新世纪五笔码表数据
  */
 export async function getXsjWubiData(): Promise<Map<string, string[]>> {
-  if (!xsjWubiCache) {
-    xsjWubiCache = await parseWubiYamlFile(XSJ_WUBI_FILE_PATH);
+  if (!preloadedData) {
+    await initializeWubiData();
   }
-  return xsjWubiCache;
+  return preloadedData!.xsjWubi;
 }
 
 /**
  * 查询汉字的编码信息
  */
 export async function getCharacterInfo(char: string) {
-  // 从YAML文件获取所有版本的五笔编码
-  const [wubi86Data, wubi98Data, xsjWubiData] = await Promise.all([
-    getWubi86Data(),
-    getWubi98Data(),
-    getXsjWubiData()
-  ]);
+  // 确保数据已加载
+  if (!preloadedData) {
+    await initializeWubiData();
+  }
   
-  const wubi86Codes = wubi86Data.get(char) || [];
-  const wubi98Codes = wubi98Data.get(char) || [];
-  const xsjCodes = xsjWubiData.get(char) || [];
+  const wubi86Codes = preloadedData!.wubi86.get(char) || [];
+  const wubi98Codes = preloadedData!.wubi98.get(char) || [];
+  const xsjCodes = preloadedData!.xsjWubi.get(char) || [];
   
   const wubi86PrimaryCode = getPrimaryCode(wubi86Codes);
   const wubi98PrimaryCode = getPrimaryCode(wubi98Codes);
