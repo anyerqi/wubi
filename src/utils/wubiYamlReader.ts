@@ -1,11 +1,11 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 
 // 解析新世纪五笔码表文件
 export async function parseWubiYamlFile(filePath: string): Promise<Map<string, string[]>> {
   try {
     // 读取文件内容
-    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const fileContent = await fs.readFile(filePath, 'utf8');
     
     // 分割元数据和词典数据
     const [, dictionaryStr] = fileContent.split('...\n\n');
@@ -40,6 +40,12 @@ export async function parseWubiYamlFile(filePath: string): Promise<Map<string, s
     return characterCodesMap;
   } catch (error) {
     console.error('解析五笔码表文件出错:', error);
+    if (error instanceof Error) {
+      console.error('错误详情:', error.message);
+      if ('code' in error && error.code === 'ENOENT') {
+        console.error('文件不存在，路径:', filePath);
+      }
+    }
     return new Map();
   }
 }
